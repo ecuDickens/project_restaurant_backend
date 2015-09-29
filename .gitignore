@@ -1,0 +1,15 @@
+.class
+.classpath
+.project
+.metadata/
+target/
+.settings/
+.DS_Store
+# config/
+.idea/
+*.iml
+# templates/
+generated/
+*.class
+derby.log
+**/classes/
