@@ -1,9 +1,9 @@
 # From services
-- com.restaurantrant.entity.Account
-- com.restaurantrant.entity.SleepRecord
-- com.restaurantrant.entity.FoodRecord
-- com.restaurantrant.entity.ExerciseRecord
-- com.restaurantrant.entity.Recipe
-- com.restaurantrant.entity.Exercise
-- com.restaurantrant.entity.HashKey
+- com.restaurant.entity.Account
+- com.restaurant.entity.SleepRecord
+- com.restaurant.entity.FoodRecord
+- com.restaurant.entity.ExerciseRecord
+- com.restaurant.entity.Recipe
+- com.restaurant.entity.Exercise
+- com.restaurant.entity.HashKey
 
