@@ -1,4 +1,5 @@
 # From services
+- com.restaurant.entity.User
 - com.restaurant.entity.Account
 - com.restaurant.entity.SleepRecord
 - com.restaurant.entity.FoodRecord

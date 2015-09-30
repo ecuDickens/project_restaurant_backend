@@ -18,6 +18,7 @@ public class JerseyServletModule extends BaseResourceModule {
     protected void configureServlets() {
         super.configureServlets();
 
+        bind(UserResource.class);
         bind(AccountResource.class);
         bind(LoginResource.class);
         bind(LogoutResource.class);
