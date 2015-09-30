@@ -19,7 +19,7 @@
                 <include>org.codehaus.jackson:jackson-core-asl</include>
                 <include>org.codehaus.jackson:jackson-mapper-asl</include>
                 <include>org.freemarker:freemarker</include>
-                <include>health:container-ext</include>
+                <include>restaurant:container-ext</include>
             </includes>
         </dependencySet>
     </dependencySets>

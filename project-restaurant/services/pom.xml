@@ -2,26 +2,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>project-health</artifactId>
-        <groupId>health</groupId>
+        <artifactId>project-restaurant</artifactId>
+        <groupId>restaurant</groupId>
         <version>12.03.00-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>services</artifactId>
     <dependencies>
         <dependency>
-            <groupId>health</groupId>
+            <groupId>restaurant</groupId>
             <artifactId>commons</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>health</groupId>
+            <groupId>restaurant</groupId>
             <artifactId>container-ext</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>health</groupId>
+            <groupId>restaurant</groupId>
             <artifactId>core</artifactId>
             <version>${project.version}</version>
         </dependency>

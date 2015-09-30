@@ -4,8 +4,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>project-health</artifactId>
-        <groupId>health</groupId>
+        <artifactId>project-restaurant</artifactId>
+        <groupId>restaurant</groupId>
         <version>12.03.00-SNAPSHOT</version>
     </parent>
     <artifactId>war</artifactId>
@@ -14,13 +14,13 @@
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
-            <groupId>health</groupId>
+            <groupId>restaurant</groupId>
             <artifactId>container-ext</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>health</groupId>
+            <groupId>restaurant</groupId>
             <artifactId>distribution</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -73,7 +73,7 @@
                             <includes>config/**/*.yml,config/**/templates/**,config/**/config/**/*.txt,config/**/*.exp,config/**/*.pem</includes>
                             <includeTypes>jar</includeTypes>
                             <excludeTransitive>false</excludeTransitive>
-                            <outputDirectory>${project.build.directory}/health-war</outputDirectory>
+                            <outputDirectory>${project.build.directory}/restaurant-war</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
@@ -81,6 +81,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>health-war</finalName>
+        <finalName>restaurant-war</finalName>
     </build>
 </project>

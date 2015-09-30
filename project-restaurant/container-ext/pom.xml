@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>project-health</artifactId>
-        <groupId>health</groupId>
+        <artifactId>project-restaurant</artifactId>
+        <groupId>restaurant</groupId>
         <version>12.03.00-SNAPSHOT</version>
     </parent>
     <artifactId>container-ext</artifactId>

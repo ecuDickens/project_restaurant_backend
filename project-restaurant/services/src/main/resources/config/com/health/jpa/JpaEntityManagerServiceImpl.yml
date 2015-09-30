@@ -1,7 +1,7 @@
 _default_:
     openjpa.ConnectionProperties:
         DriverClassName: com.mysql.jdbc.Driver
-        Url: jdbc:mysql://127.0.0.1:3306/health
+        Url: jdbc:mysql://127.0.0.1:3306/restaurant
         MaxActive: 20
         MaxWait: 10000
         TestOnBorrow: true

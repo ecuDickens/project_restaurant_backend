@@ -1,4 +1,4 @@
-<%@ page import="com.health.types.ErrorType" %>
+<%@ page import="com.restaurant.types.ErrorType" %>
 <%@ page import="com.google.common.base.Strings" %>
 <%@ page import="org.codehaus.jackson.map.ObjectMapper" %>
 <%@ page contentType="application/json" pageEncoding="UTF-8" session="false" trimDirectiveWhitespaces="true" isErrorPage="true"  %>

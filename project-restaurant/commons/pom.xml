@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>project-health</artifactId>
-        <groupId>health</groupId>
+        <artifactId>project-restaurant</artifactId>
+        <groupId>restaurant</groupId>
         <version>12.03.00-SNAPSHOT</version>
     </parent>
     <artifactId>commons</artifactId>
@@ -15,7 +15,7 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>health</groupId>
+            <groupId>restaurant</groupId>
             <artifactId>container-ext</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
