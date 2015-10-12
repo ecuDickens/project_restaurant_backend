@@ -19,10 +19,7 @@ public class JerseyServletModule extends BaseResourceModule {
         super.configureServlets();
 
         bind(UserResource.class);
-        bind(AccountResource.class);
-        bind(LoginResource.class);
-        bind(LogoutResource.class);
-        bind(ExerciseResource.class);
+        bind(RoleResource.class);
 
         final Map<String, String> params = new HashMap<String, String>();
         params.put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE.toString());

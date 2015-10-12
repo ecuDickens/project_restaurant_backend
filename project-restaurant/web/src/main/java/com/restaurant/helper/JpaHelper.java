@@ -3,25 +3,23 @@ package com.restaurant.helper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.restaurant.base.ThrowingFunction1;
-import com.restaurant.entity.Account;
-import com.restaurant.entity.HashKey;
 import com.restaurant.exception.HttpException;
 import com.restaurant.jpa.session.EntitySession;
 import com.restaurant.jpa.spi.JpaEntityManagerService;
-import org.joda.time.DateTime;
-import org.joda.time.Minutes;
 
-import javax.persistence.*;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
-import java.sql.Timestamp;
-
-import static com.restaurant.collect.MoreIterables.asFluent;
 
 @Singleton
 public class JpaHelper {
 
     private JpaEntityManagerService jpaManagerService;
+
+    public final static String SUBMITTER_HEADER = "Submitter-Id";
 
     @Inject
     public JpaHelper(JpaEntityManagerService jpaManagerService) {
@@ -71,41 +69,6 @@ public class JpaHelper {
                 return result;
             }
         });
-    }
-
-
-    public Boolean isLoggedIn(final Long accountId) throws HttpException {
-        return executeJpaTransaction(new ThrowingFunction1<Boolean, EntityManager, HttpException>() {
-            @Override
-            public Boolean apply(EntityManager em) throws HttpException {
-                Boolean isLoggedIn = Boolean.FALSE;
-                final Account account = em.find(Account.class, accountId);
-                if (null != account.getLastLoginDateTime()) {
-                    final DateTime now = DateTime.now();
-                    isLoggedIn =  Minutes.minutesBetween(new DateTime(account.getLastLoginDateTime()), now).getMinutes() < 20;
-                    if (isLoggedIn) {
-                        em.refresh(account, LockModeType.PESSIMISTIC_WRITE);
-                        account.setLastLoginDateTime( new Timestamp(now.getMillis()));
-                    }
-                }
-                return isLoggedIn;
-            }
-        });
-    }
-
-    public Account getAccountByEmail(final EntityManager em, final String email) {
-        final TypedQuery<Account> query = em.createQuery("select a from Account a where a.email = :email", Account.class);
-        query.setParameter("email", email);
-        return asFluent(query.getResultList()).first().orNull();
-    }
-
-    public HashKey getHashKey(final EntityManager em, final String email, final String password) {
-        return getHashKey(em, HashKey.generateHashCode(email, password));
-    }
-    public HashKey getHashKey(final EntityManager em, final Integer hashCode) {
-        final TypedQuery<HashKey> hquery = em.createQuery("select a from HashKey a where a.hashCode = :hashCode", HashKey.class);
-        hquery.setParameter("hashCode", hashCode);
-        return asFluent(hquery.getResultList()).first().orNull();
     }
 
     public static Response buildResponse(Response.Status status) {

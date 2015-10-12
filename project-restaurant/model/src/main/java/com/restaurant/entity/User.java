@@ -9,69 +9,85 @@ import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
+import static com.restaurant.collect.MoreIterables.asFluent;
 import static java.lang.Boolean.TRUE;
+import static javax.persistence.CascadeType.ALL;
 import static org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion.NON_NULL;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 @JsonSerialize(include = NON_NULL)
 public class User {
 
     @Id
     @GeneratedValue
-    @Column(name = "ID")
+    @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "CREATED_DATETIME", nullable = false)
+    @Column(name = "user_created_date", nullable = false)
     @JsonSerialize(using=TimestampSerializer.class, include = NON_NULL)
     @JsonDeserialize(using=TimestampDeserializer.class)
-    private Timestamp createdDatetime;
+    private Timestamp createdDate;
 
-    @Column(name = "LAST_MODIFIED_DATETIME", nullable = false)
+    @Column(name = "user_activity_date", nullable = false)
     @JsonSerialize(using=TimestampSerializer.class, include = NON_NULL)
     @JsonDeserialize(using=TimestampDeserializer.class)
-    private Timestamp lastModifiedDatetime;
+    private Timestamp activityDate;
 
-    @Column(name = "EMAIL", unique = true)
+    @Column(name = "user_email", unique = true)
     private String email;
 
-    @Column(name = "PASSWORD", unique = true)
+    @Column(name = "user_password", nullable = false)
     private String password;
 
-    @Column(name = "FIRST_NAME", length = 50, nullable = false)
+    @Column(name = "user_first_name", length = 50, nullable = false)
     private String firstName;
 
-    @Column(name = "LAST_NAME", length = 50, nullable = false)
+    @Column(name = "user_last_name", length = 50, nullable = false)
     private String lastName;
 
-    @Column(name = "ROLE", length = 50)
-    private String role;
+    @OneToOne(optional=false)
+    @JoinColumn(name="user_role_id", referencedColumnName="role")
+    private Role role;
 
-    @Column(name = "PAYMENT_METHOD", length = 50)
+    @Column(name = "user_payment_method", length = 50)
     private String paymentMethod;
 
-    @Column(name = "WAGE")
+    @Column(name = "user_wage")
     private Integer wage;
 
-    @Column(name = "WEEKLY_HOURS")
+    @Column(name = "user_weekly_hours")
     private Integer weeklyHours;
 
-    @Column(name = "ACTIVE")
+    @Column(name = "user_is_active")
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "user", targetEntity = PaymentMethod.class, fetch = FetchType.EAGER, cascade = ALL)
+    private List<PaymentMethod> paymentMethods;
+
+    @OneToMany(mappedBy = "user", targetEntity = Order.class, fetch = FetchType.EAGER, cascade = ALL)
+    private List<Order> orders;
 
     @PrePersist
     protected void onCreate() {
-        createdDatetime = new Timestamp(DateTime.now().getMillis());
-        lastModifiedDatetime = new Timestamp(DateTime.now().getMillis());
+        createdDate = new Timestamp(DateTime.now().getMillis());
+        activityDate = new Timestamp(DateTime.now().getMillis());
         if (null == isActive) {
             isActive = TRUE;
+        }
+        if (null == weeklyHours) {
+            weeklyHours = 0;
+        }
+        if (null == wage) {
+            wage = 0;
         }
     }
 
     @PreUpdate
     protected void onUpdate() {
-        lastModifiedDatetime = new Timestamp(DateTime.now().getMillis());
+        activityDate = new Timestamp(DateTime.now().getMillis());
     }
 
     public Long getId() {
@@ -81,18 +97,18 @@ public class User {
         this.id = id;
     }
 
-    public Timestamp getCreatedDatetime() {
-        return createdDatetime;
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
-    public void setCreatedDatetime(Timestamp createdDatetime) {
-        this.createdDatetime = createdDatetime;
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public Timestamp getLastModifiedDatetime() {
-        return lastModifiedDatetime;
+    public Timestamp getActivityDate() {
+        return activityDate;
     }
-    public void setLastModifiedDatetime(Timestamp lastModifiedDatetime) {
-        this.lastModifiedDatetime = lastModifiedDatetime;
+    public void setActivityDate(Timestamp activityDate) {
+        this.activityDate = activityDate;
     }
 
     public String getEmail() {
@@ -123,10 +139,10 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -154,20 +170,34 @@ public class User {
     public Boolean getIsActive() {
         return isActive;
     }
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setIsActive(Boolean active) {
+        isActive = active;
+    }
+
+    public List<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
+    }
+    public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
+        this.paymentMethods = paymentMethods;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     public User withId(final Long id) {
         setId(id);
         return this;
     }
-    public User withCreatedDatetime(final Timestamp createdDatetime) {
-        setCreatedDatetime(createdDatetime);
+    public User withCreatedDate(final Timestamp createdDate) {
+        setCreatedDate(createdDate);
         return this;
     }
-    public User withLastModifiedDatetime(final Timestamp lastModifiedDatetime) {
-        setLastModifiedDatetime(lastModifiedDatetime);
+    public User withActivityDate(final Timestamp activityDate) {
+        setActivityDate(activityDate);
         return this;
     }
     public User withEmail(final String email) {
@@ -186,7 +216,7 @@ public class User {
         setLastName(lastName);
         return this;
     }
-    public User withRole(final String role) {
+    public User withRole(final Role role) {
         setRole(role);
         return this;
     }
@@ -206,8 +236,22 @@ public class User {
         setIsActive(isActive);
         return this;
     }
+    public User withPaymentMethods(final List<PaymentMethod> paymentMethods) {
+        setPaymentMethods(paymentMethods);
+        return this;
+    }
+    public User withOrders(final List<Order> orders) {
+        setOrders(orders);
+        return this;
+    }
 
     @JsonIgnore
     public void clean() {
+        for (PaymentMethod paymentMethod : asFluent(paymentMethods)) {
+            paymentMethod.clean();
+        }
+        for (Order order : asFluent(orders)) {
+            order.clean();
+        }
     }
 }

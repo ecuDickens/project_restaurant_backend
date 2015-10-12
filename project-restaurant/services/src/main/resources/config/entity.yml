@@ -1,10 +1,14 @@
 # From services
+- com.restaurant.entity.InventoryItem
+- com.restaurant.entity.MenuInventoryItem
+- com.restaurant.entity.MenuItem
+- com.restaurant.entity.Order
+- com.restaurant.entity.OrderItem
+- com.restaurant.entity.Payment
+- com.restaurant.entity.PaymentMethod
+- com.restaurant.entity.PurchaseOrder
+- com.restaurant.entity.PurchaseOrderItem
+- com.restaurant.entity.Refund
+- com.restaurant.entity.Role
 - com.restaurant.entity.User
-- com.restaurant.entity.Account
-- com.restaurant.entity.SleepRecord
-- com.restaurant.entity.FoodRecord
-- com.restaurant.entity.ExerciseRecord
-- com.restaurant.entity.Recipe
-- com.restaurant.entity.Exercise
-- com.restaurant.entity.HashKey
 
