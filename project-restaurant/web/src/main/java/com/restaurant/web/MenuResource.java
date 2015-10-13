@@ -14,20 +14,20 @@ import javax.ws.rs.core.Response;
 import static com.restaurant.jpa.helper.JpaHelper.buildResponse;
 import static javax.ws.rs.core.Response.Status.OK;
 
-@Path("/roles")
+@Path("/menu")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON })
-public class RoleResource {
+public class MenuResource {
 
-    private final RestaurantService service;
+    final RestaurantService service;
 
     @Inject
-    public RoleResource(final RestaurantService service) {
+    public MenuResource(final RestaurantService service) {
         this.service = service;
     }
 
     @GET
-    public Response getRoles() throws HttpException {
+    public Response getMenu() throws HttpException {
         return buildResponse(OK, service.getRoles());
     }
 }

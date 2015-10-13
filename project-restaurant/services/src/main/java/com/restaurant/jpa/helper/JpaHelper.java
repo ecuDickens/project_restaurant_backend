@@ -1,4 +1,4 @@
-package com.restaurant.helper;
+package com.restaurant.jpa.helper;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
