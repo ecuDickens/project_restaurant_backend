@@ -1,7 +1,6 @@
 package com.restaurant.servlet;
 
 import com.restaurant.web.*;
-import com.google.inject.throwingproviders.ThrowingProviderBinder;
 import com.sun.jersey.api.container.filter.RolesAllowedResourceFilterFactory;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
@@ -31,8 +30,5 @@ public class JerseyServletModule extends BaseResourceModule {
 
         serve("/rest/*").with(GuiceContainer.class, params);
         filter("/*").through(DebuggingResponseFilter.class);
-
-        // allow for @CheckProvides
-        install(ThrowingProviderBinder.forModule(this));
     }
 }

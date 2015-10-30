@@ -3,7 +3,6 @@ package com.restaurant.collect;
 
 import com.google.common.base.Preconditions;
 import com.restaurant.map.IterableMappingModule;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -80,11 +79,6 @@ public class DefaultFluentList<T> extends DefaultFluentIterable<T> implements Li
         }
         DefaultFluentList other = (DefaultFluentList)obj;
         return delegate.equals(other.delegate);
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(73, 5).appendSuper(delegate.hashCode()).build();
     }
 
     @Override

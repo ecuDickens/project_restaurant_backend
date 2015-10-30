@@ -7,7 +7,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.*;
 import com.restaurant.map.IterableMappingModule;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -138,12 +137,6 @@ public class DefaultFluentIterable<T> implements FluentIterable<T> {
         DefaultFluentIterable other = (DefaultFluentIterable)obj;
         return delegate.equals(other.delegate);
     }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(11, 13).appendSuper(delegate.hashCode()).build();
-    }
-
 
     public static class DefaultFluentIterableDeserializer extends IterableMappingModule.IterableDeserializer {
         DefaultFluentIterableDeserializer(JavaType containedType) {
