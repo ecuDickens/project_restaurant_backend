@@ -118,9 +118,7 @@ public class DefaultFluentIterable<T> implements FluentIterable<T> {
 
     @Override
     public String toString() {
-        return "DefaultFluentIterable{" +
-                "delegate=" + delegate +
-                '}';
+        return "DefaultFluentIterable{" + "delegate=" + delegate + '}';
     }
 
     @Override

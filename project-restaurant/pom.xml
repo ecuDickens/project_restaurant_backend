@@ -6,16 +6,13 @@
     <version>12.03.00-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>project-restaurant</name>
-    <!-- Properties -->
     <properties>
-        <!-- Build number -->
-        <openjpa.version>2.2.0</openjpa.version>
-        <jackson.version>1.9.12</jackson.version>
-        <jersey.version>1.12</jersey.version>
         <guava.version>14.0</guava.version>
         <guice.version>3.0</guice.version>
+        <javax.version>3.0.1</javax.version>
+        <jersey.version>1.12</jersey.version>
         <joda.time.version>2.1</joda.time.version>
-        <apache.http.version>4.2.1</apache.http.version>
+        <openjpa.version>2.2.0</openjpa.version>
         <snakeyaml.version>1.10</snakeyaml.version>
     </properties>
     <scm>
@@ -33,50 +30,6 @@
         <module>war</module>
         <module>web</module>
     </modules>
-
-    <build>
-        <plugins>
-            <!-- Using specific endorsed jar files -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>javax.xml.ws</groupId>
-                                    <artifactId>jaxws-api</artifactId>
-                                    <version>2.2.5</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/endorsed</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Set the compiler compliance level and endorsed directory -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <compilerArguments>
-                        <endorseddirs>${project.build.directory}/endorsed</endorseddirs>
-                    </compilerArguments>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>
@@ -123,7 +76,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <version>${javax.version}</version>
         </dependency>
     </dependencies>
 </project>
