@@ -7,7 +7,6 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import com.restaurant.annotations.ExternalServiceOptions;
 import com.restaurant.exception.HttpException;
 import com.restaurant.inject.Configuration;
 import com.restaurant.jpa.session.EntitySession;
@@ -32,7 +31,6 @@ import java.util.Set;
  * way of hiding the publically documented EntityManager API.
  */
 @Singleton
-@ExternalServiceOptions(name = "AmazonDatabase")
 public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
 
     /** the resource relative path to the entity configuration yaml file */

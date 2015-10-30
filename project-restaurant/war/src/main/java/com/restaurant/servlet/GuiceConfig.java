@@ -33,12 +33,11 @@ public class GuiceConfig extends BaseServletContextListener {
         super.contextInitialized(servletContextEvent);
 
         // start all Workers
-        final Registry<Worker> workerRegistry = getInjector().getInstance(Key.get(new TypeLiteral<Registry<Worker>>() {
-        }));
+        final Registry<Worker> workerRegistry = getInjector().getInstance(Key.get(new TypeLiteral<Registry<Worker>>() {} ));
         final ImmutableSet<Worker> workers = workerRegistry.getRegistered();
         final List<ListenableFuture<Boolean>> futures = Lists.newArrayListWithExpectedSize(workers.size());
-        if(!"enabled".equals(DomainConstants.XFAST)) {
-            for(Worker instance : workers) {
+        if (!"enabled".equals(DomainConstants.XFAST)) {
+            for (Worker instance : workers) {
                 futures.add(instance.start());
             }
         }
@@ -58,7 +57,6 @@ public class GuiceConfig extends BaseServletContextListener {
         return Lists.<Module>newArrayList(
                 new BaseServicesModule(),
                 new JerseyServletModule(),
-                new APIModule(),
                 new RegistryModule<ExternalService>(new TypeLiteral<Registry<ExternalService>>(){}));
     }
 }
