@@ -1,22 +1,16 @@
 package com.restaurant.inject;
 
-
-import com.restaurant.DomainConstants;
-import com.restaurant.Env;
-import com.restaurant.logging.Marker;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.restaurant.DomainConstants;
+import com.restaurant.Env;
 import com.restaurant.configuration.spi.ConfigurationException;
 import com.restaurant.configuration.spi.ConfigurationLoader;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.Map;
 
 public class Configuration<T> {
-
-    private static final XLogger LOGGER = XLoggerFactory.getXLogger(Configuration.class);
 
     private Class<T> type;
 
@@ -48,7 +42,7 @@ public class Configuration<T> {
     @SuppressWarnings("unchecked")
     public void setType(Type type) {
         Preconditions.checkArgument(type instanceof Class, "Type is not a Class");
-        this.type = (Class<T>)type;
+        this.type = (Class<T>) type;
     }
 
     public Class<T> getType() {
@@ -56,8 +50,6 @@ public class Configuration<T> {
     }
 
     public Map<?, ?> getConfig() {
-        LOGGER.entry();
-
         Map<?, ?> map;
 
         if(null != buildInMap) {
@@ -69,7 +61,6 @@ public class Configuration<T> {
             // lookup the config
             final String basePath = type.getName().replace('.', '/') + ".yml";
             String path = env.getConfigRoot() + '/' + basePath;
-            LOGGER.debug("Loading config file {}", path);
 
             map = null;
             try {
@@ -79,24 +70,18 @@ public class Configuration<T> {
                     final String resourcePath = env.getConfigRootBase() + basePath;
                     try {
                         map = configurationLoader.getConfiguration(DomainConstants.RESOURCE_PREFIX + resourcePath);
-                    } catch (ConfigurationException x2) {
-                        LOGGER.error(Marker.insert(Marker.RESTAURANT_ERROR_INTERNAL,
-                                "Cannot find configuration for class " + type.getCanonicalName()));
-                    }
+                    } catch (ConfigurationException ignored) { }
                 }
             }
 
             // hand back the settings for the current domain if structured as such
             if (env.isDomainSet() && map != null && !map.isEmpty() && map.containsKey(env.getDomain())) {
                 map = (Map<?, ?>) map.get(env.getDomain());
-                LOGGER.debug("Domain configuration map: {}", map);
             }
 
             // store it
             buildInMap = map;
         }
-
-        LOGGER.exit(map);
         return map;
     }
 

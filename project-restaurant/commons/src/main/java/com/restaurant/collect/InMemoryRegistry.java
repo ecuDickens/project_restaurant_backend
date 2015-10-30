@@ -1,9 +1,6 @@
 package com.restaurant.collect;
 
-
 import com.google.common.collect.ImmutableSet;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import java.util.WeakHashMap;
 

@@ -1,11 +1,8 @@
 package com.restaurant.inject;
 
-
+import com.google.inject.spi.InjectionListener;
 import com.restaurant.collect.InMemoryRegistry;
 import com.restaurant.collect.Registry;
-import com.google.inject.spi.InjectionListener;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 /**
  * Listens to injections of a particular type and registers each injected instance into an
@@ -14,13 +11,10 @@ import org.slf4j.ext.XLoggerFactory;
  */
 public class RegistryInjectionListener<T> implements InjectionListener<T> {
 
-    private static final XLogger LOGGER = XLoggerFactory.getXLogger(RegistryInjectionListener.class);
-
     private final InMemoryRegistry<T> registry = new InMemoryRegistry<T>();
 
     @Override
     public void afterInjection(final T injectee) {
-        LOGGER.debug("Registering injected instance: {}", injectee);
         registry.register(injectee);
     }
 

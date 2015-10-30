@@ -9,5 +9,9 @@ public class APIModule extends AbstractModule {
     protected void configure() {
         bind(UserResource.class);
         bind(RoleResource.class);
+        bind(InventoryResource.class);
+        bind(MenuResource.class);
+        bind(OrderResource.class);
+        bind(PurchaseOrderResource.class);
     }
 }

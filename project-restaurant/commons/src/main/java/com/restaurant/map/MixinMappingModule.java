@@ -1,10 +1,7 @@
 package com.restaurant.map;
 
-
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.module.SimpleModule;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 public class MixinMappingModule extends SimpleModule {
 

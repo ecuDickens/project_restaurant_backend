@@ -5,8 +5,6 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,9 +15,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class YamlInterpolator {
-    
-    /** Logger */
-    private static final XLogger LOGGER = XLoggerFactory.getXLogger(YamlInterpolator.class);
     
     /** FreeMarker configuration  */
     private static final Configuration CONFIGURATION = createConfiguration();
@@ -50,21 +45,14 @@ public class YamlInterpolator {
     /**
      * Creates a basic Data Model and loads external data from XML file
      *
-     * @return Map<String, Object> the root node of the data model
+     * @return the root node of the data model
      */
     private Map<String, Object> loadDataModel() {
         Map<String, Object> modelRoot = new HashMap<String, Object>();
-
-        // load dynamic and/or system data
         modelRoot.put("username", env.getCurrentUserName().toLowerCase());
         modelRoot.put("environment", env.getEnvironment());
         modelRoot.put("domain", env.getDomain());
         modelRoot.put("version", env.getVersion());
-
-        // load static data from file
-        // not needed now
-
-        LOGGER.debug("FreeMarker DataModel: {}", modelRoot);
         return modelRoot;
     }
 
@@ -83,8 +71,6 @@ public class YamlInterpolator {
      * @throws IOException if error in read/write from/to streams
      */
     public Reader process(final Reader reader, final Map<String, Object> instanceDataModel) throws IOException {
-        LOGGER.entry(this.name, reader);
-
         try {
             // blend the global data model with any instance data model entries
             Map<String, Object> rootMap = loadDataModel();
@@ -98,11 +84,8 @@ public class YamlInterpolator {
             template.process(rootMap, stringWriter);
 
             return new StringReader(stringWriter.getBuffer().toString());
-        }
-        catch (TemplateException ex) {
-            String errMsg = "Failed processing template " + name;
-            LOGGER.error(errMsg, ex);
-            throw new IOException(errMsg, ex);
+        } catch (TemplateException ex) {
+            throw new IOException("Failed processing template " + name, ex);
         }
     }
 

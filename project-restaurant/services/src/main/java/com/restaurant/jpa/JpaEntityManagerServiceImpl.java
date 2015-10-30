@@ -12,10 +12,7 @@ import com.restaurant.exception.HttpException;
 import com.restaurant.inject.Configuration;
 import com.restaurant.jpa.session.EntitySession;
 import com.restaurant.jpa.spi.JpaEntityManagerService;
-import com.restaurant.logging.Marker;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.persistence.EntityManager;
@@ -37,9 +34,6 @@ import java.util.Set;
 @Singleton
 @ExternalServiceOptions(name = "AmazonDatabase")
 public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
-
-    /** logger */
-    private static final XLogger LOGGER = XLoggerFactory.getXLogger(JpaEntityManagerServiceImpl.class);
 
     /** the resource relative path to the entity configuration yaml file */
     private static final String ENTITY_YAML_CONFIGURATION_PATH = "config/entity.yml";
@@ -73,22 +67,14 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
      * settings from the supplied map.
      */
     private EntityManagerFactory createEntityManagerFactory(Map<?, ?> config) {
-        LOGGER.entry(config);
-
         // obtain the properties to pass into the factory
         Map properties = parseEntityManagerFactoryProperties(config);
         if (null == properties || properties.isEmpty()) {
-            final String msg = "Missing properties for configuring the entity manager factory.";
-            LOGGER.error(Marker.insert(Marker.RESTAURANT_ERROR_SERVICE_JPA, msg));
-            throw new IllegalArgumentException(msg);
+            throw new IllegalArgumentException("Missing properties for configuring the entity manager factory.");
         }
 
         // arg must match persistence-unit.name in persistence.xml
-        EntityManagerFactory entityManagerFactory =
-                Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
-
-        LOGGER.exit(entityManagerFactory);
-        return entityManagerFactory;
+        return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
     }
 
     @Override
@@ -110,8 +96,6 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
      * applied to the creation of an EntityManagerFactory object.
      */
     private Map parseEntityManagerFactoryProperties(Map<?, ?> config) {
-        LOGGER.entry(config);
-
         // parameter validations
         if (null == config || config.isEmpty()) {
             throw new IllegalArgumentException("A configuration settings map must be supplied.");
@@ -122,11 +106,7 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
         StringBuilder propertiesStr = new StringBuilder("");
         Map<?, ?> connectionProperties = (Map)config.get(KEY_CONNECTION_PROPERTIES);
         if (null == connectionProperties || connectionProperties.isEmpty()) {
-            final String msg =
-                    String.format("Config is missing required object: %s",
-                            KEY_CONNECTION_PROPERTIES);
-            LOGGER.error(Marker.insert(Marker.RESTAURANT_ERROR_SERVICE_JPA, msg));
-            throw new IllegalArgumentException(msg);
+            throw new IllegalArgumentException(String.format("Config is missing required object: %s", KEY_CONNECTION_PROPERTIES));
         }
 
         // constructs a comma separated list of key value property pairs from the corresponding
@@ -148,17 +128,8 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
         // register entity classes for persistence
         List<String> entityClassNames = getEntityClassNames();
         if (entityClassNames != null && !entityClassNames.isEmpty()) {
-            properties.put(KEY_META_DATA_FACTORY,
-                    String.format("org.apache.openjpa.persistence.jdbc.PersistenceMappingFactory(types=%s)",
-                            Joiner.on(";").join(entityClassNames)));
-            LOGGER.info("Registered entities: {}",
-                    entityClassNames);
+            properties.put(KEY_META_DATA_FACTORY, String.format("org.apache.openjpa.persistence.jdbc.PersistenceMappingFactory(types=%s)", Joiner.on(";").join(entityClassNames)));
         }
-        else {
-            LOGGER.info("No entities have been registered.");
-        }
-
-        LOGGER.exit(properties);
         return properties;
     }
 
@@ -171,7 +142,6 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
      * normal fully registered list of entity classes.
      */
     private List<String> getEntityClassNames() {
-        LOGGER.entry();
         List<String> entityClassNames = Lists.newArrayList(this.eClassNames);
 
         // load the entity.yml configuration file
@@ -183,17 +153,12 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
         if (entityConfigurations != null && !Iterables.isEmpty(entityConfigurations)) {
             for (Object entityConfiguration : entityConfigurations) {
                 if (null == entityConfiguration || !(entityConfiguration instanceof List)) {
-                    final String msg = "Expected list of fully qualified entity class names in entity.yml";
-                    LOGGER.error(Marker.insert(Marker.RESTAURANT_ERROR_SERVICE_JPA, msg));
-                    throw new IllegalArgumentException(msg);
-                }
-                else {
+                    throw new IllegalArgumentException("Expected list of fully qualified entity class names in entity.yml");
+                } else {
                     entityClassNames.addAll((List<String>)entityConfiguration);
                 }
             }
         }
-
-        LOGGER.exit(entityClassNames);
         return entityClassNames;
     }
 
@@ -219,9 +184,6 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
      */
     @Override
     public <R> R invoke(int attempts, final EntitySession<R> session) throws HttpException {
-        LOGGER.entry(attempts, session);
-
-
         // parameter validations
         if (attempts <= 0) {
             throw new IllegalArgumentException("A positive non-zero attempts value must be supplied.");
@@ -240,14 +202,8 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
                 try {
                     result = session.execute(entityManager);
                     isSuccessful = true;
-                }
-                catch (PersistenceException x) {
-                    if (i < attempts - 1) {
-                        // try again
-                        LOGGER.info(String.format("Retry session (attempt: %s)", i), x);
-                    }
-                    else {
-                        LOGGER.warn("Failed to execute session.", x);
+                } catch (PersistenceException x) {
+                    if (i >= attempts - 1) {
                         throw x;
                     }
                 }
@@ -256,14 +212,10 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
         finally {
             // clean up the active entity manager
             if (entityManager.getTransaction().isActive()) {
-                LOGGER.error(Marker.insert(Marker.RESTAURANT_ERROR_INTERNAL,
-                        "Session ended with open transaction; forcing rollback."));
                 entityManager.getTransaction().rollback();
             }
             entityManager.close();
         }
-
-        LOGGER.exit(result);
         return result;
     }
 

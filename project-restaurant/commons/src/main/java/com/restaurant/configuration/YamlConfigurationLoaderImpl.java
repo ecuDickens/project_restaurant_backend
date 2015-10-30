@@ -1,14 +1,11 @@
 package com.restaurant.configuration;
 
-import com.restaurant.DomainConstants;
-import com.restaurant.Env;
-import com.restaurant.logging.Marker;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
+import com.restaurant.DomainConstants;
+import com.restaurant.Env;
 import com.restaurant.configuration.spi.ConfigurationLoadException;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -18,8 +15,6 @@ import java.util.Map;
  * ConfigurationLoader Provider for YAML files.  Supports file and resource via classloader.
  */
 public class YamlConfigurationLoaderImpl extends BaseConfigurationLoader {
-
-    private static final XLogger LOGGER = XLoggerFactory.getXLogger(YamlConfigurationLoaderImpl.class);
 
     private final Env env;
 
@@ -35,11 +30,10 @@ public class YamlConfigurationLoaderImpl extends BaseConfigurationLoader {
 
     @Override
     public Map<?, ?> getConfiguration(final String name, final String environment) throws ConfigurationLoadException {
-        LOGGER.entry(name, environment);
 
         Map<?, ?> map = null;
         InputStream is = null;
-        Reader reader = null;
+        Reader reader;
 
         try {
             // load the input yaml configuration file
@@ -50,13 +44,8 @@ public class YamlConfigurationLoaderImpl extends BaseConfigurationLoader {
                 reader = new StringReader(contents);
                 map = (Map<?, ?>) new Yaml().load(reader);
                 reader.reset();
-            }
-            catch (IOException e) {
-                final String msg =
-                        String.format("Unable to read configuration file %s for environment %s",
-                                name, environment);
-                LOGGER.error(Marker.insert(Marker.RESTAURANT_ERROR_INTERNAL, msg), e);
-                throw new ConfigurationLoadException(msg, e);
+            } catch (IOException e) {
+                throw new ConfigurationLoadException(String.format("Unable to read configuration file %s for environment %s", name, environment), e);
             }
 
             // normalize and select the environment stanza
@@ -68,30 +57,19 @@ public class YamlConfigurationLoaderImpl extends BaseConfigurationLoader {
                 reader = markerProcessor.process(reader, extractInstanceDataMode(map));
                 reader.reset();
                 map = (Map<?, ?>) new Yaml().load(reader);
-            }
-            catch (IOException e) {
-                final String msg =
-                        String.format("Unable to interpolate data model for configuration file %s and environment %s",
-                                name, environment);
-                LOGGER.error(Marker.insert(Marker.RESTAURANT_ERROR_INTERNAL, msg), e);
-                throw new ConfigurationLoadException(msg, e);
+            } catch (IOException e) {
+                throw new ConfigurationLoadException(String.format("Unable to interpolate data model for configuration file %s and environment %s", name, environment), e);
             }
 
             // re-normalize the evaluated configuration map
             map = normalize(map, environment);
-        }
-        finally {
+        } finally {
             try {
                 if (is != null) {
                     is.close();
                 }
-
-            } catch (IOException x) {
-                LOGGER.error("Failed to close input stream to " + name, x);
-            }
+            } catch (IOException ignored) { }
         }
-
-        LOGGER.exit(map);
         return map;
     }
 

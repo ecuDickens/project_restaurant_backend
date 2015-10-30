@@ -20,6 +20,10 @@ public class JerseyServletModule extends BaseResourceModule {
 
         bind(UserResource.class);
         bind(RoleResource.class);
+        bind(InventoryResource.class);
+        bind(MenuResource.class);
+        bind(OrderResource.class);
+        bind(PurchaseOrderResource.class);
 
         final Map<String, String> params = new HashMap<String, String>();
         params.put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE.toString());

@@ -1,14 +1,10 @@
 package com.restaurant.configuration;
 
+import com.restaurant.configuration.spi.ConfigurationLoader;
+
 import java.util.Map;
 
-import com.restaurant.configuration.spi.ConfigurationLoader;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
-
 public abstract class BaseConfigurationLoader implements ConfigurationLoader {
-
-    private static final XLogger LOGGER = XLoggerFactory.getXLogger(BaseConfigurationLoader.class);
 
     public static final String DEFAULT = "_default_";
     
@@ -23,8 +19,6 @@ public abstract class BaseConfigurationLoader implements ConfigurationLoader {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Map normalize(final Map map, final String env) {
-        LOGGER.entry(map, env);
-
         Map result = null;
         if (map != null && !map.isEmpty()) {
             Map defaultMap = (Map) map.get(DEFAULT);
@@ -41,8 +35,6 @@ public abstract class BaseConfigurationLoader implements ConfigurationLoader {
                 result = defaultMap;
             }
         }
-
-        LOGGER.exit(result);
         return result;
     }
 }
