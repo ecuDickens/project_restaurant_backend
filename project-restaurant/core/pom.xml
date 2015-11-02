@@ -6,18 +6,18 @@
     <parent>
         <artifactId>project-restaurant</artifactId>
         <groupId>restaurant</groupId>
-        <version>12.03.00-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <artifactId>core</artifactId>
     <dependencies>
         <dependency>
-            <groupId>restaurant</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>container-ext</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>restaurant</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>commons</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -33,13 +33,6 @@
                     <addDefaultConstructor>true</addDefaultConstructor>
                     <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.openjpa</groupId>
-                        <artifactId>openjpa</artifactId>
-                        <version>${openjpa.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

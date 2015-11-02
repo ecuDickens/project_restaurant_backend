@@ -11,5 +11,4 @@ target/
 # templates/
 generated/
 *.class
-derby.log
 **/classes/

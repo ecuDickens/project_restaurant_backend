@@ -6,14 +6,11 @@
 final ObjectMapper objectMapper = new ObjectMapper();
 final ErrorType error = new ErrorType();
 final Object errorMessage = request.getAttribute("javax.servlet.error.message");
-
 if (errorMessage != null && !Strings.isNullOrEmpty((String)errorMessage)) {
     error.setMessage((String)errorMessage);
-}
-else if (exception != null && !Strings.isNullOrEmpty(exception.getMessage())) {
+} else if (exception != null && !Strings.isNullOrEmpty(exception.getMessage())) {
     error.setMessage(exception.getMessage().replaceAll("\"", "'"));
-}
-else {
+} else {
     error.setMessage(""); // an empty message
 }
 %>

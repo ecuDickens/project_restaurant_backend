@@ -29,6 +29,6 @@ public class JerseyServletModule extends BaseResourceModule {
         params.put(ResourceFilters.class.getName(), RolesAllowedResourceFilterFactory.class.getName());
 
         serve("/rest/*").with(GuiceContainer.class, params);
-        filter("/*").through(DebuggingResponseFilter.class);
+        filter("/*").through(CorsFilter.class);
     }
 }

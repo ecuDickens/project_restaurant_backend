@@ -2,50 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>project-restaurant</artifactId>
         <groupId>restaurant</groupId>
-        <version>12.03.00-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-
     <artifactId>web</artifactId>
     <dependencies>
         <dependency>
-            <groupId>restaurant</groupId>
-            <artifactId>container-ext</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>restaurant</groupId>
-            <artifactId>core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>restaurant</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>services</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>restaurant</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>model</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
-            <version>1.9.0</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>2.18.2</version>
         </dependency>
     </dependencies>
 </project>

@@ -16,8 +16,6 @@
                 <include>joda-time:joda-time</include>
                 <include>com.google.guava:guava</include>
                 <include>org.yaml:snakeyaml</include>
-                <include>org.codehaus.jackson:jackson-core-asl</include>
-                <include>org.codehaus.jackson:jackson-mapper-asl</include>
                 <include>restaurant:container-ext</include>
             </includes>
         </dependencySet>

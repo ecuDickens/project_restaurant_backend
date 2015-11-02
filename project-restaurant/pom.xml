@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>restaurant</groupId>
     <artifactId>project-restaurant</artifactId>
-    <version>12.03.00-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
     <name>project-restaurant</name>
     <properties>
+        <ehcache.version>2.5.1</ehcache.version>
+        <freemarker.version>2.3.18</freemarker.version>
         <guava.version>14.0</guava.version>
         <guice.version>3.0</guice.version>
         <javax.version>3.0.1</javax.version>
         <jersey.version>1.12</jersey.version>
         <joda.time.version>2.1</joda.time.version>
+        <mysql.version>5.1.21</mysql.version>
         <openjpa.version>2.2.0</openjpa.version>
         <snakeyaml.version>1.10</snakeyaml.version>
     </properties>
@@ -20,8 +25,8 @@
         <developerConnection>scm:git:git://git@github.com:ecuDickens/project_restaurant_backend.git</developerConnection>
     </scm>
     <modules>
-        <module>container-ext</module>
         <module>commons</module>
+        <module>container-ext</module>
         <module>core</module>
         <module>distribution</module>
         <module>ear</module>
@@ -30,7 +35,6 @@
         <module>war</module>
         <module>web</module>
     </modules>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.openjpa</groupId>
@@ -77,6 +81,22 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
         </dependency>
     </dependencies>
 </project>

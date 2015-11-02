@@ -46,6 +46,4 @@ public class InventoryResource {
                                    final InventoryItem inventoryItem) throws HttpException {
         return buildResponse(OK, service.updateInventoryItem(sku, inventoryItem));
     }
-
-
 }

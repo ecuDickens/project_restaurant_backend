@@ -11,15 +11,12 @@ import com.restaurant.exception.HttpException;
 import com.restaurant.inject.Configuration;
 import com.restaurant.jpa.session.EntitySession;
 import com.restaurant.jpa.spi.JpaEntityManagerService;
-import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,19 +71,6 @@ public class JpaEntityManagerServiceImpl implements JpaEntityManagerService {
         // arg must match persistence-unit.name in persistence.xml
         return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
     }
-
-    @Override
-    public void assertHealthy() throws SQLException{
-        EntityManager manager = createEntityManager();
-        Connection connection = (Connection) OpenJPAPersistence.cast(manager).getConnection();
-        try {
-            connection.nativeSQL("select 1");
-        }
-        finally {
-            connection.close();
-        }
-    }
-
 
     /**
      * Parses the configuration settings from the supplied map that apply to initializing an

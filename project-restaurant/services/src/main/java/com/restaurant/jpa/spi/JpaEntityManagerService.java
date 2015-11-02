@@ -2,7 +2,6 @@ package com.restaurant.jpa.spi;
 
 import com.restaurant.exception.HttpException;
 import com.restaurant.jpa.session.EntitySession;
-import com.restaurant.spi.ExternalService;
 
 import javax.persistence.EntityManager;
 
@@ -12,7 +11,7 @@ import javax.persistence.EntityManager;
  * grained access to the underlying EntityManager object, and attempt to keep out of the
  * way of hiding the publicly documented EntityManager API.
  */
-public interface JpaEntityManagerService extends ExternalService {
+public interface JpaEntityManagerService {
 
     /**
      * Invokes one or more actions against the backing persistence unit as expressed in

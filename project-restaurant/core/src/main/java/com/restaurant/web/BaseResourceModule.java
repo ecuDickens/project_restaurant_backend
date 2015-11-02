@@ -1,6 +1,5 @@
 package com.restaurant.web;
 
-
 import com.google.inject.Scopes;
 import com.restaurant.exception.mappers.*;
 import com.sun.jersey.guice.JerseyServletModule;

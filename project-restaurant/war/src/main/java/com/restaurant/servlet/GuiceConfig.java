@@ -2,16 +2,12 @@ package com.restaurant.servlet;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.restaurant.DomainConstants;
 import com.restaurant.collect.Registry;
-import com.restaurant.inject.RegistryModule;
-import com.restaurant.spi.ExternalService;
 import com.restaurant.spi.Worker;
 
 import javax.servlet.ServletContextEvent;
@@ -42,13 +38,6 @@ public class GuiceConfig extends BaseServletContextListener {
             }
         }
 
-        Futures.addCallback(Futures.allAsList(futures), new FutureCallback<List<Boolean>>() {
-            @Override
-            public void onSuccess(List<Boolean> result) { }
-            @Override
-            public void onFailure(Throwable t) { }
-        });
-
         servletContextEvent.getServletContext().setAttribute("com.restaurant.injector", getInjector());
     }
 
@@ -56,7 +45,6 @@ public class GuiceConfig extends BaseServletContextListener {
     protected Iterable<Module> getModules() {
         return Lists.<Module>newArrayList(
                 new BaseServicesModule(),
-                new JerseyServletModule(),
-                new RegistryModule<ExternalService>(new TypeLiteral<Registry<ExternalService>>(){}));
+                new JerseyServletModule());
     }
 }
