@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <name>project-restaurant</name>
     <properties>
+        <auth.version>3.1.1</auth.version>
         <ehcache.version>2.5.1</ehcache.version>
         <freemarker.version>2.3.18</freemarker.version>
         <guava.version>14.0</guava.version>
@@ -81,6 +82,12 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.security.auth.message</artifactId>
+            <version>${auth.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>

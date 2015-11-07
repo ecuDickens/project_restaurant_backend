@@ -1,0 +1,3 @@
+delete-message-security-provider --layer HttpServlet RoutingSAM
+create-message-security-provider --layer HttpServlet --classname com.restaurant.DefaultServerAuthModule --providertype server --property realm.name=file:com.restaurant.DefaultServerAuthModule.delegate.default=com.restaurant.DefaultServerAuthModule:com.restaurant.DefaultServerAuthModule.delegate.Basic=com.restaurant.DefaultServerAuthModule:com.restaurant.DefaultServerAuthModule.delegate.Bearer=com.restaurant.DefaultServerAuthModule RoutingSAM
+set server.security-service.auth-realm.file.property.assign-groups=
