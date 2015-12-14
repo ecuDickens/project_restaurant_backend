@@ -49,13 +49,13 @@ public class OrderResource {
 
     @POST
     @Path("/{order_number}/refund")
-    public Response refundOrder(@PathParam("order_number") final Long orderNumber) throws HttpException {
-        return buildResponse(OK, service.refundOrder(orderNumber));
+    public Response refundOrder(@PathParam("order_number") final Long orderNumber, @QueryParam("refund_amount") final Integer refundAmount) throws HttpException {
+        return buildResponse(OK, service.refundOrder(orderNumber, refundAmount));
     }
 
     @POST
     @Path("/{order_number}/charge")
-    public Response chargeOrder(@PathParam("order_number") final Long orderNumber) throws HttpException {
-        return buildResponse(OK, service.chargeOrder(orderNumber));
+    public Response chargeOrder(@PathParam("order_number") final Long orderNumber, @QueryParam("refund_amount") final Integer chargeAmount) throws HttpException {
+        return buildResponse(OK, service.chargeOrder(orderNumber, chargeAmount));
     }
 }

@@ -2,6 +2,7 @@ package com.restaurant.service.restaurant;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.restaurant.base.ThrowingFunction1;
 import com.restaurant.entity.*;
 import com.restaurant.exception.HttpException;
@@ -16,6 +17,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.restaurant.entity.enums.RoleValues.Role.CUSTOMER;
 import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 
+@Singleton
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final JpaHelper helper;
@@ -324,12 +326,12 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Order refundOrder(final Long orderNumber) throws HttpException {
+    public Order refundOrder(final Long orderNumber, final Integer refundAmount) throws HttpException {
         return null;
     }
 
     @Override
-    public Order chargeOrder(final Long orderNumber) throws HttpException {
+    public Order chargeOrder(final Long orderNumber, final Integer paymentAmount) throws HttpException {
         return null;
     }
 }

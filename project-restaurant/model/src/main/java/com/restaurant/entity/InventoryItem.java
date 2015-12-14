@@ -63,6 +63,7 @@ public class InventoryItem {
         if (null == isActive) {
             isActive = TRUE;
         }
+
     }
 
     @PreUpdate
