@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.restaurant.collect.MoreIterables.asFluent;
 import static com.restaurant.entity.enums.RoleValues.Role.CUSTOMER;
 import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 
@@ -126,7 +127,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             @Override
             public Long apply(EntityManager em) throws HttpException {
                 em.persist(menuItem);
-                for (MenuInventoryItem menuInventoryItem : menuItem.getMenuInventoryItems()) {
+                for (MenuInventoryItem menuInventoryItem : asFluent(menuItem.getMenuInventoryItems())) {
                     em.persist(menuInventoryItem);
                 }
                 em.flush();
@@ -148,10 +149,10 @@ public class RestaurantServiceImpl implements RestaurantService {
                         .withDescription(isNullOrEmpty(menuItem.getDescription()) ? forUpdate.getDescription() : menuItem.getDescription())
                         .withPrice(null == menuItem.getPrice() ? forUpdate.getPrice() : menuItem.getPrice())
                         .withType(null == menuItem.getType() ? forUpdate.getType() : menuItem.getType());
-                for (MenuInventoryItem oldMII : forUpdate.getMenuInventoryItems()) {
+                for (MenuInventoryItem oldMII : asFluent(forUpdate.getMenuInventoryItems())) {
                     em.remove(oldMII);
                 }
-                for (MenuInventoryItem newMII : menuItem.getMenuInventoryItems()) {
+                for (MenuInventoryItem newMII : asFluent(menuItem.getMenuInventoryItems())) {
                     em.persist(newMII);
                 }
                 return forUpdate;
@@ -308,9 +309,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         return helper.executeJpaTransaction(new ThrowingFunction1<Long, EntityManager, HttpException>() {
             @Override
             public Long apply(EntityManager em) throws HttpException {
-                em.persist(order);
+                Integer total = 0;
                 for (OrderItem orderItem : order.getOrderItems()) {
-                    em.persist(orderItem);
+                    if (null == orderItem.getQuantity()) {
+                        orderItem.setQuantity(1);
+                    }
+                    orderItem.setTotal(orderItem.getUnitPrice() * orderItem.getQuantity());
+                    orderItem.setOrder(order);
+                    total += orderItem.getTotal();
+
                     final MenuItem menuItem = em.find(MenuItem.class, orderItem.getMenuItem().getId());
                     for (MenuInventoryItem menuInventoryItem : menuItem.getMenuInventoryItems()) {
                         final InventoryItem inventoryItem = menuInventoryItem.getInventoryItem();
@@ -319,6 +326,14 @@ public class RestaurantServiceImpl implements RestaurantService {
                     }
 
                 }
+                if (null == order.getTax()) {
+                    order.setTax(0);
+                }
+                if (null == order.getTip()) {
+                    order.setTip(0);
+                }
+                order.withItemTotal(total).withBalance(total + order.getTip() + order.getTax());
+                em.persist(order);
                 em.flush();
                 return order.getOrderNumber();
             }
@@ -327,11 +342,45 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Order refundOrder(final Long orderNumber, final Integer refundAmount) throws HttpException {
-        return null;
+        helper.executeJpaTransaction(new ThrowingFunction1<Order, EntityManager, HttpException>() {
+            @Override
+            public Order apply(EntityManager em) throws HttpException {
+                final Order forUpdate = em.find(Order.class, orderNumber);
+
+                final Integer actualRefund = null == refundAmount ? forUpdate.getItemTotal() - forUpdate.getBalance() : Math.max(forUpdate.getItemTotal() - forUpdate.getBalance(), refundAmount);
+                if (actualRefund > 0) {
+                    em.refresh(forUpdate, PESSIMISTIC_WRITE);
+                    forUpdate
+                            .withBalance(forUpdate.getBalance() + actualRefund);
+                    em.persist(new Refund().withOrder(new Order().withOrderNumber(orderNumber))
+                            .withRefundAmount(actualRefund));
+                    em.flush();
+                }
+                return forUpdate;
+            }
+        });
+        return getOrder(orderNumber);
     }
 
     @Override
     public Order chargeOrder(final Long orderNumber, final Integer paymentAmount) throws HttpException {
-        return null;
+        helper.executeJpaTransaction(new ThrowingFunction1<Order, EntityManager, HttpException>() {
+            @Override
+            public Order apply(EntityManager em) throws HttpException {
+                final Order forUpdate = em.find(Order.class, orderNumber);
+
+                final Integer actualPayment = null == paymentAmount ? forUpdate.getBalance() : Math.min(forUpdate.getBalance(), paymentAmount);
+                if (actualPayment > 0) {
+                    em.refresh(forUpdate, PESSIMISTIC_WRITE);
+                    forUpdate
+                            .withBalance(forUpdate.getBalance() - actualPayment);
+                    em.persist(new Payment().withOrder(new Order().withOrderNumber(orderNumber))
+                            .withPaymentAmount(actualPayment));
+                    em.flush();
+                }
+                return forUpdate;
+            }
+        });
+        return getOrder(orderNumber);
     }
 }

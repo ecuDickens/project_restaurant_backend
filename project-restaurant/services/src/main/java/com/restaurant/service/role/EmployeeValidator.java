@@ -15,13 +15,18 @@ public class EmployeeValidator implements RoleValidator {
     }
 
     @Override
-    public boolean canManageOrder(User submitter, Order order) {
+    public boolean canManageOrder(final User submitter, final Order order) {
         return true;
     }
 
     @Override
-    public boolean canManageUser(User submitter, User user) {
+    public boolean canManageUser(final User submitter, final User user) {
         return null != submitter && (submitter.getId().equals(user.getId()) || user.getRole().getRole().equals(CUSTOMER.getValue()));
+    }
+
+    @Override
+    public boolean canViewMenu(final Boolean showInactive) {
+        return null == showInactive || !showInactive;
     }
 
     @Override

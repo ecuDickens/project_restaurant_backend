@@ -39,16 +39,16 @@ public class Order {
     @JoinColumn(name="order_user_id", referencedColumnName="user_id")
     private User user;
 
-    @Column(name="order_payment_method_id", nullable = false)
+    @Column(name="order_payment_method_id")
     private String paymentMethod;
 
-    @Column(name = "order_total", nullable = false)
-    private Integer total;
+    @Column(name = "order_balance", nullable = false)
+    private Integer balance;
 
     @Column(name = "order_item_total", nullable = false)
     private Integer itemTotal;
 
-    @Column(name = "order_tax", nullable = false)
+    @Column(name = "order_tax", nullable = true)
     private Integer tax;
 
     @Column(name = "order_tip", nullable = false)
@@ -70,6 +70,15 @@ public class Order {
     protected void onCreate() {
         createdDate = new Timestamp(DateTime.now().getMillis());
         activityDate = new Timestamp(DateTime.now().getMillis());
+        if (null == tax) {
+            tax = 0;
+        }
+        if (null == tip) {
+            tip = 0;
+        }
+        if (null == paymentMethod) {
+            paymentMethod = "";
+        }
     }
 
     @PreUpdate
@@ -112,11 +121,11 @@ public class Order {
         this.paymentMethod = paymentMethod;
     }
 
-    public Integer getTotal() {
-        return total;
+    public Integer getBalance() {
+        return balance;
     }
-    public void setTotal(Integer total) {
-        this.total = total;
+    public void setBalance(Integer balance) {
+        this.balance = balance;
     }
 
     public Integer getItemTotal() {
@@ -188,8 +197,8 @@ public class Order {
         setPaymentMethod(paymentMethod);
         return this;
     }
-    public Order withTotal(final Integer total) {
-        setTotal(total);
+    public Order withBalance(final Integer balance) {
+        setBalance(balance);
         return this;
     }
     public Order withTip(final Integer tip) {
@@ -223,5 +232,18 @@ public class Order {
 
     @JsonIgnore
     public void clean() {
+        if (user != null) {
+            user.setOrders(null);
+        }
+        for (OrderItem orderItem : orderItems) {
+            orderItem.setOrder(null);
+            orderItem.clean();
+        }
+        for (Refund refund : refunds) {
+            refund.setOrder(null);
+        }
+        for (Payment payment : payments) {
+            payment.setOrder(null);
+        }
     }
 }

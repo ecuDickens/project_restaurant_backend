@@ -36,7 +36,7 @@ public class Payment {
     @JoinColumn(name="payment_order_number", referencedColumnName="order_number")
     private Order order;
 
-    @ManyToOne(optional=false)
+    @ManyToOne(optional=true)
     @JoinColumn(name="payment_method", referencedColumnName="pm_id")
     private PaymentMethod paymentMethod;
 

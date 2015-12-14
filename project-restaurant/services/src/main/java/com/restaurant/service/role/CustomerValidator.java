@@ -26,6 +26,11 @@ public class CustomerValidator implements RoleValidator {
     }
 
     @Override
+    public boolean canViewMenu(final Boolean showInactive) {
+        return null == showInactive || !showInactive;
+    }
+
+    @Override
     public boolean canManageMenu() {
         return false;
     }

@@ -23,7 +23,7 @@ import static javax.ws.rs.core.Response.Status.*;
 @Produces({ MediaType.APPLICATION_JSON })
 public class InventoryResource {
 
-    final RestaurantService service;
+    private final RestaurantService service;
     private final RoleValidatorFactory validatorFactory;
 
     @Inject

@@ -23,6 +23,11 @@ public class AdminValidator implements RoleValidator{
     }
 
     @Override
+    public boolean canViewMenu(Boolean showInactive) {
+        return true;
+    }
+
+    @Override
     public boolean canManageMenu() {
         return true;
     }

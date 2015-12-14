@@ -251,6 +251,7 @@ public class User {
             paymentMethod.clean();
         }
         for (Order order : asFluent(orders)) {
+            order.setUser(null);
             order.clean();
         }
     }

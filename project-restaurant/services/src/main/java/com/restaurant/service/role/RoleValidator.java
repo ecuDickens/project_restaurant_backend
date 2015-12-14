@@ -36,6 +36,13 @@ public interface RoleValidator {
     boolean canManageUser(User submitter, User user);
 
     /**
+     * Denotes whether a role can view menu items.
+     * @param showInactive the flag denoting whether to load inactive menu items.
+     * @return true if a valid action.
+     */
+    boolean canViewMenu(Boolean showInactive);
+
+    /**
      * Denotes whether the role context can create/update menu items.
      *
      * @return true if a valid action.

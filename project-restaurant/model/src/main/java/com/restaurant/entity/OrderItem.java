@@ -40,9 +40,13 @@ public class OrderItem {
     @JoinColumn(name="oi_menu_item_id", referencedColumnName="menu_item_id")
     private MenuItem menuItem;
 
-    // Want to record the actual total for this order item in case the menu cost changes.
+    // Unit Price * quantity.
     @Column(name = "oi_total", nullable = false)
     private Integer total;
+
+    // Want to record the actual total for this order item in case the menu cost changes.
+    @Column(name = "oi_unit_price", nullable = false)
+    private Integer unitPrice;
 
     @Column(name = "oi_quantity", nullable = false)
     private Integer quantity;
@@ -100,6 +104,13 @@ public class OrderItem {
         this.total = total;
     }
 
+    public Integer getUnitPrice() {
+        return unitPrice;
+    }
+    public void setUnitPrice(Integer unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
@@ -131,7 +142,10 @@ public class OrderItem {
         setOrder(order);
         return this;
     }
-
+    public OrderItem withUnitPrice(final Integer unitPrice) {
+        setUnitPrice(unitPrice);
+        return this;
+    }
     public OrderItem withTotal(final Integer total) {
         setTotal(total);
         return this;
@@ -139,5 +153,6 @@ public class OrderItem {
 
     @JsonIgnore
     public void clean() {
+        menuItem.setOrderItems(null);
     }
 }

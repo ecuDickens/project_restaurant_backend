@@ -12,9 +12,10 @@ import static com.restaurant.collect.MoreCollections.enumsByValue;
 public class MenuItemValues {
     @JsonSerialize(using = ToStringSerializer.class)
     public static enum Type implements HasValue<String> {
-        APPETIZER("Seasoning"),
-        ENTREE("Meat"),
-        DESSERT("Vegetable"),
+        APPETIZER("Appetizer"),
+        ENTREE("Entree"),
+        SIDE("Side"),
+        DESSERT("Dessert"),
         OTHER("Other");
 
         private final String value;
